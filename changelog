@@ -1,0 +1,12 @@
+turnkey-drupal9-16.0 (1) turnkey; urgency=low
+
+  * Initial release of Drupal9:
+
+    - Forked from Drupal8 appliance
+    - Latest version of Drush is installed via composer at build time.
+    - Latest version of Drupal9 is installed via Composer.
+
+  * Note: Please refer to turnkey-core's changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Stefan Davis <stefan@turnkeylinux.org>  Fri, 03 Jul 2015 11:21:28 +1000
