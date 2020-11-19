@@ -31,7 +31,7 @@ chown $USER:$USER $WEBROOT
 
 # install drush
 cd $WEBROOT
-composer require drush/drush
+echo 'yes' | composer require drush/drush
 
 # install global drush-launcher (drush installed as drupal module via composer above)
 wget -O /usr/local/bin/drush https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar
@@ -58,13 +58,13 @@ drush site-install standard -y \
     --db-url=mysql://$DB_USER:$DB_PASS@localhost/$DB_NAME
 
 # download and install modules
-composer require drupal/ctools
-composer require drupal/field_group
-composer require drupal/google_analytics
-composer require drupal/honeypot
-composer require drupal/imce
-composer require drupal/pathauto
-composer require drupal/token
+echo 'yes' | composer require drupal/ctools
+echo 'yes' | composer require drupal/field_group
+echo 'yes' | composer require drupal/google_analytics
+echo 'yes' | composer require drupal/honeypot
+echo 'yes' | composer require drupal/imce
+echo 'yes' | composer require drupal/pathauto
+echo 'yes' | composer require drupal/token
 
 drush en -y \
     ctools \
