@@ -85,10 +85,10 @@ profile:: **Edit > My newsletter** tab).
 Notes on documentation
 ----------------------
 
-The links here relevant to docuentation all link to drupal 8
+The links here relevant to documentation all link to drupal 8
 documentation, this is not an accident but rather due to the fact that
 as of writing there are no drupal 9 documentation specifically. This
-afaik is partially (or wholey perhaps) due to the fact that the
+AFAIK is partially (or wholly perhaps) due to the fact that the
 changes between drupal 8 and 9 are rather small, and mostly not apparent
 on the surface. As such the documentation for drupal 8 should largely
 suffice.
