@@ -59,7 +59,7 @@ def main():
             d = Dialog('TurnKey Linux - First boot configuration')
 
         email = d.get_email(
-            "Drupal8 Email",
+            "Drupal9 Email",
             "Enter email address for the Drupal9 'admin' account.",
 
             "admin@example.com")
@@ -72,7 +72,7 @@ def main():
             
         domain = d.get_input(
             "Drupal9 Domain",
-            "Enter the domain to serve Drupal8.",
+            "Enter the domain to serve Drupal9.",
             DEFAULT_DOMAIN)
             
     if domain == "DEFAULT":
