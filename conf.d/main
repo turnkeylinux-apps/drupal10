@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/bash -ex
 
 DB_NAME=drupal9
 DB_USER=drupal9
@@ -26,12 +26,13 @@ export HTTPS_PROXY_REQUEST_FULLURI=false # work around composer not working behi
 export COMPOSER_MEMORY_LIMIT=-1 # temporarily disable composer memory limits during install
 
 # install drupal9
-composer create-project drupal/recommended-project $WEBROOT --no-dev --no-interaction
+mkdir -p $WEBROOT
 chown $USER:$USER $WEBROOT
+turnkey-composer create-project drupal/recommended-project $WEBROOT --no-dev --no-interaction
 
 # install drush
 cd $WEBROOT
-echo 'yes' | composer require drush/drush
+turnkey-composer require drush/drush --no-interaction
 
 # install global drush-launcher (drush installed as drupal module via composer above)
 wget -O /usr/local/bin/drush https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar
@@ -58,13 +59,16 @@ drush site-install standard -y \
     --db-url=mysql://$DB_USER:$DB_PASS@localhost/$DB_NAME
 
 # download and install modules
-echo 'yes' | composer require drupal/ctools
-echo 'yes' | composer require drupal/field_group
-echo 'yes' | composer require drupal/google_analytics
-echo 'yes' | composer require drupal/honeypot
-echo 'yes' | composer require drupal/imce
-echo 'yes' | composer require drupal/pathauto
-echo 'yes' | composer require drupal/token
+MODULES="drupal/ctools \
+         drupal/field_group \
+         drupal/google_analytics \
+         drupal/honeypot \
+         drupal/imce \
+         drupal/pathauto \
+         drupal/token"
+for module in $MODULES; do
+    turnkey-composer require $module --no-interaction
+done
 
 drush en -y \
     ctools \

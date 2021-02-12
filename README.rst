@@ -11,14 +11,19 @@ and on top of that:
 
 - Drupal 9 configurations:
    
-   - Installed (using composer) from upstream source code to /var/www/drupal9
+   - Installed (using composer_) from upstream source code to /var/www/drupal9.
+     As of v16.1, doc root is owned by www-data (webserver user). This new
+     default eases management (especially with tools such as the turnkey script
+     wrappers) but also has potential security implications.
 
      **Security note**: Updates to Drupal may require supervision so
      they **ARE NOT** configured to install automatically. See below for
      updating Drupal. And/or see `Drupal 8 documentation`_
 
-   - Includes drush and composer for command line administration and
-     configuration.
+   - Includes drush_, drupal-console_ and composer_ for command line
+     administration, configuration and development. Also includes relevant
+     wrapper scripts; turnkey-drush_, turnkey-drupal_ & turnkey-composer_ (run
+     the relevant command, but as www-data user).
 
    - Drupal security update alerts delivered to your inbox - requires
      `Security Alerts`_ ('secalerts') be enabled on firstboot with a valid
@@ -59,24 +64,24 @@ Supervised Manual Drupal Update
 -------------------------------
 
 It is possible to check for and install updates from the Drupal Admin
-UI:: **Admin > Reports > Avaialble Updates**
+UI:: **Admin > Reports > Available Updates**
 
 Updates for Drupal9 Core often need to be done via commandline. For full
 details, please consult the `Drupal8 Upgrade docs`_, we recommend using
 `Composer to update from the commandline`_::
 
     cd /var/www/drupal9
-    # update composer - not strictly neccessary
+    # update composer - not strictly necessary
     composer self-update
-    composer update drupal/core webflo/drupal-core-require-dev --with-dependencies
-    drush updatedb -y
-    drush cr
+    turnkey-composer update drupal/core webflo/drupal-core-require-dev --with-dependencies
+    turnkey-drush updatedb -y
+    turnkey-drush cr
 
 Modules can be updated like this, e.g. ctools::
 
-    composer update drupal/ctools
-    drush updatedb -y
-    drush cr
+    turnkey-composer update drupal/ctools
+    turnkey-drush updatedb -y
+    turnkey-drush cr
 
 We also recommend that you  subscribe to the drupal.org security
 newsletter (create a user account on drupal.org and within your drupal.org
@@ -103,6 +108,12 @@ Credentials *(passwords set at first boot)*
 
 .. _Drupal: https://drupal.org
 .. _TurnKey Core: https://www.turnkeylinux.org/core
+.. _composer: https://getcomposer.org/
+.. _drush: https://www.drush.org/
+.. _drupal-console: https://drupalconsole.com/
+.. _turnkey-drush: https://github.com/turnkeylinux-apps/drupal8/blob/master/overlay/usr/local/bin/turnkey-drush
+.. _turnkey-drupal: https://github.com/turnkeylinux-apps/drupal8/blob/master/overlay/usr/local/bin/turnkey-drupal
+.. _turnkey-composer: https://github.com/turnkeylinux/common/blob/master/overlays/composer/usr/local/bin/turnkey-composer
 .. _Security Alerts: https://www.turnkeylinux.org/docs/automatic-security-alerts
 .. _Drupal 8 documentation: https://www.drupal.org/docs/8/update
 .. _Field group: https://www.drupal.org/project/field_group
