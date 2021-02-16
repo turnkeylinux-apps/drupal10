@@ -4,6 +4,8 @@ turnkey-drupal9-16.1 (1) turnkey; urgency=low
 
   * Update Drush to latest - 10.3.6.
 
+  * Include Drupal Console - 1.9.7 - closes #1564.
+
   * Drupal 9 files & directories all owned by 'www-data' user to make
     management easier. Note that whilst this does make management easier,
     (especially in conjunction with 'turnkey-composer') it does have
@@ -12,13 +14,15 @@ turnkey-drupal9-16.1 (1) turnkey; urgency=low
   * Include 'turnkey-composer' wrapper script - runs composer as www-data
     user. Makes it easy to not run composer as root - part of #1539.
 
+  * Also include 'turnkey-drush' and 'turnkey-drupal' wrapper scripts.
+
   * Explicitly install composer (rather than automatically include in all LAMP
     based appliances) - part of #1563.
 
   * Note: Please refer to turnkey-core's 16.1 changelog for changes common to
     all appliances. Here we only describe changes specific to this appliance.
 
- -- Jeremy Davis <jeremy@turnkeylinux.org>  Wed, 10 Feb 2021 16:00:16 +1100
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Tue, 16 Feb 2021 11:28:09 +1100
 
 turnkey-drupal9-16.0 (1) turnkey; urgency=low
 
