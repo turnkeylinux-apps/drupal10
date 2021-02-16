@@ -39,6 +39,16 @@ wget -O /usr/local/bin/drush https://github.com/drush-ops/drush-launcher/release
 chmod +x /usr/local/bin/drush
 drush self-update
 
+# install drupal console
+cd $WEBROOT
+turnkey-composer require drupal/console --prefer-dist --optimize-autoloader --no-interaction --with-all-dependencies
+
+# install drupal console launcher
+cd / # drupal self-update fails from WEBROOT?!
+wget -O /usr/local/bin/drupal -L https://drupalconsole.com/installer
+chmod +x /usr/local/bin/drupal
+drupal self-update
+
 CONF=$WEBROOT/web/sites/default/settings.php
 cp $WEBROOT/web/sites/default/default.settings.php $CONF
 

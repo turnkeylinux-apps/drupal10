@@ -67,13 +67,13 @@ It is possible to check for and install updates from the Drupal Admin
 UI:: **Admin > Reports > Available Updates**
 
 Updates for Drupal9 Core often need to be done via commandline. For full
-details, please consult the `Drupal8 Upgrade docs`_, we recommend using
-`Composer to update from the commandline`_::
+details, please consult the `Drupal Upgrade docs`_, we recommend using
+`Composer to update from the commandline`_ (via turnkey-composer_)::
 
     cd /var/www/drupal9
     # update composer - not strictly necessary
     composer self-update
-    turnkey-composer update drupal/core webflo/drupal-core-require-dev --with-dependencies
+    turnkey-composer update drupal/core --with-dependencies
     turnkey-drush updatedb -y
     turnkey-drush cr
 
@@ -86,17 +86,6 @@ Modules can be updated like this, e.g. ctools::
 We also recommend that you  subscribe to the drupal.org security
 newsletter (create a user account on drupal.org and within your drupal.org
 profile:: **Edit > My newsletter** tab).
-
-Notes on documentation
-----------------------
-
-The links here relevant to documentation all link to drupal 8
-documentation, this is not an accident but rather due to the fact that
-as of writing there are no drupal 9 documentation specifically. This
-AFAIK is partially (or wholly perhaps) due to the fact that the
-changes between drupal 8 and 9 are rather small, and mostly not apparent
-on the surface. As such the documentation for drupal 8 should largely
-suffice.
 
 
 Credentials *(passwords set at first boot)*
@@ -123,5 +112,5 @@ Credentials *(passwords set at first boot)*
 .. _PathAuto: https://drupal.org/project/pathauto
 .. _Token: https://drupal.org/project/token
 .. _Adminer: https://www.adminer.org
-.. _Drupal8 Upgrade docs: https://www.drupal.org/docs/8/update
-.. _Composer to update from the commandline: https://www.drupal.org/docs/8/update/update-core-via-composer
+.. _Drupal Upgrade docs: https://www.drupal.org/docs/updating-drupal
+.. _Composer to update from the commandline: https://www.drupal.org/docs/updating-drupal/updating-drupal-core-via-composer
