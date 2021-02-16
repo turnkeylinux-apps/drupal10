@@ -10,3 +10,4 @@ php-xml
 php-curl
 php-mbstring        /* improved multibyte utf-8 string support */
 php-uploadprogress  /* support for upload progress info */
+php-zip             /* drush dependency */

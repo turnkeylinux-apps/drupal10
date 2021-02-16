@@ -30,15 +30,6 @@ mkdir -p $WEBROOT
 chown $USER:$USER $WEBROOT
 turnkey-composer create-project drupal/recommended-project $WEBROOT --no-dev --no-interaction
 
-# install drush
-cd $WEBROOT
-turnkey-composer require drush/drush --no-interaction
-
-# install global drush-launcher (drush installed as drupal module via composer above)
-wget -O /usr/local/bin/drush https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar
-chmod +x /usr/local/bin/drush
-drush self-update
-
 # install drupal console
 cd $WEBROOT
 turnkey-composer require drupal/console --prefer-dist --optimize-autoloader --no-interaction --with-all-dependencies
@@ -48,6 +39,15 @@ cd / # drupal self-update fails from WEBROOT?!
 wget -O /usr/local/bin/drupal -L https://drupalconsole.com/installer
 chmod +x /usr/local/bin/drupal
 drupal self-update
+
+# install drush
+cd $WEBROOT
+turnkey-composer require drush/drush --no-interaction
+
+# install global drush-launcher (drush installed as drupal module via composer above)
+wget -O /usr/local/bin/drush https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar
+chmod +x /usr/local/bin/drush
+drush self-update
 
 CONF=$WEBROOT/web/sites/default/settings.php
 cp $WEBROOT/web/sites/default/default.settings.php $CONF
