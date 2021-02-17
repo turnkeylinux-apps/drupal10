@@ -51,21 +51,19 @@ drush self-update
 
 CONF=$WEBROOT/web/sites/default/settings.php
 cp $WEBROOT/web/sites/default/default.settings.php $CONF
+LIBRARIES_PATH=$WEBROOT/libraries
+mkdir -p $LIBRARIES_PATH/
+chown -R $USER:$USER $WEBROOT
 
 service mysql start
+mysqladmin create $DB_NAME
+mysql --batch --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost identified by '$DB_PASS'; flush privileges;"
 
 cd $WEBROOT
-
-MYSQL="mysql -u root -e"
-$MYSQL "CREATE DATABASE $DB_NAME CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-$MYSQL "CREATE USER $DB_USER@localhost IDENTIFIED BY \"$DB_PASS\";"
-$MYSQL "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES ON \
-    $DB_NAME.* TO $DB_USER@localhost IDENTIFIED BY \"$DB_PASS\";"
-
-drush site-install standard -y \
+turnkey-drush site-install standard -y \
     --account-name=$ADMIN_NAME \
     --account-pass=$ADMIN_PASS \
-    --site-name="TurnKey Drupal9" \
+    --site-name="TurnKey\\\ Drupal9" \
     --db-url=mysql://$DB_USER:$DB_PASS@localhost/$DB_NAME
 
 # download and install modules
@@ -80,21 +78,14 @@ for module in $MODULES; do
     turnkey-composer require $module --no-interaction
 done
 
-drush en -y \
+turnkey-drush en -y \
     ctools \
     field_group \
     google_analytics \
     honeypot \
     pathauto
 
-drush cache-rebuild
-
-# Create default libraries path
-LIBRARIES_PATH=$WEBROOT/libraries
-mkdir -p $LIBRARIES_PATH/
-
-# Ensure 'files' dir is writeable by webserver
-chown -R $USER:$USER $WEBROOT/web/sites/default/files
+turnkey-drush cache-rebuild
 
 # configure apache
 a2dissite 000-default
@@ -136,23 +127,16 @@ EOF
 chmod +x $CRON_DRUPAL
 
 # create welcome page
-MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
+MYSQL_BATCH="mysql --batch --execute"
 
 WELCOME='<p>Please follow these steps to set up and start using your website:</p><ol><li><strong>Configure your website:</strong> To get started, log in as <b>admin</b> and visit the <a href=\"/admin\">administration section</a>, where you can customize and configure all aspects of your website.</li><li><strong>Start posting content:</strong> When ready, delete this welcome and <a href=\"/node/add\">create content</a> for your website.</li></ol><p>For more information, please refer to the <a href=\"https://www.turnkeylinux.org/drupal9\">TurnKey Drupal9 release notes</a>, <a href=\"/admin/help\">help section</a>, or the <a href=\"http://drupal.org/handbooks\">online Drupal handbooks</a>. You may also post at the <a href=\"http://drupal.org/forum\">Drupal forum</a>, or view the wide range of <a href=\"http://drupal.org/support\">other support options</a> available.</p>'
 
-$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node (nid, vid, type, uuid, langcode) VALUES (1,1,'page','dbab9403-2ebd-4fb9-8a00-e764ce980ecd','en');"
-
-$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node__body (bundle, deleted, entity_id, revision_id, langcode, delta, body_value, body_summary, body_format) VALUES ('page',0,1,1,'en',0,'$WELCOME','$WELCOME','basic_html');"
-
-#$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node_access (nid, langcode, fallback, gid, realm, grant_view, grant_update, grant_delete) VALUES (0,'',1,0,'all',1,0,0);"
-
-$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node_field_data (nid, vid, type, langcode, title, uid, status, created, changed, promote, sticky, revision_translation_affected, default_langcode) VALUES (1,1,'page','en','Welcome to TurnKey Drupal',1,1,1435831165,1435831165,1,0,1,1);"
-
-$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node_field_revision (nid, vid, langcode, title, uid, status, created, changed, promote, sticky, revision_translation_affected, default_langcode) VALUES (1,1,'en','Welcome to TurnKey Drupal',1,1,1435831165,1435831165,1,0,1,1);"
-
-$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node_revision (nid, vid, langcode, revision_timestamp, revision_uid, revision_log) VALUES (1,1,'en',1435831535,1,'');"
-
-$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node_revision__body (bundle, deleted, entity_id, revision_id, langcode, delta, body_value, body_summary, body_format) VALUES ('page',0,1,1,'en',0,'$WELCOME','$WELCOME','basic_html');"
+$MYSQL_BATCH "INSERT INTO $DB_NAME.node (nid, vid, type, uuid, langcode) VALUES (1,1,'page','dbab9403-2ebd-4fb9-8a00-e764ce980ecd','en');"
+$MYSQL_BATCH "INSERT INTO $DB_NAME.node__body (bundle, deleted, entity_id, revision_id, langcode, delta, body_value, body_summary, body_format) VALUES ('page',0,1,1,'en',0,'$WELCOME','$WELCOME','basic_html');"
+$MYSQL_BATCH "INSERT INTO $DB_NAME.node_field_data (nid, vid, type, langcode, title, uid, status, created, changed, promote, sticky, revision_translation_affected, default_langcode) VALUES (1,1,'page','en','Welcome to TurnKey Drupal',1,1,1435831165,1435831165,1,0,1,1);"
+$MYSQL_BATCH "INSERT INTO $DB_NAME.node_field_revision (nid, vid, langcode, title, uid, status, created, changed, promote, sticky, revision_translation_affected, default_langcode) VALUES (1,1,'en','Welcome to TurnKey Drupal',1,1,1435831165,1435831165,1,0,1,1);"
+$MYSQL_BATCH "INSERT INTO $DB_NAME.node_revision (nid, vid, langcode, revision_timestamp, revision_uid, revision_log) VALUES (1,1,'en',1435831535,1,'');"
+$MYSQL_BATCH "INSERT INTO $DB_NAME.node_revision__body (bundle, deleted, entity_id, revision_id, langcode, delta, body_value, body_summary, body_format) VALUES ('page',0,1,1,'en',0,'$WELCOME','$WELCOME','basic_html');"
 
 service mysql stop
 
