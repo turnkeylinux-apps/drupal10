@@ -1,3 +1,9 @@
+turnkey-drupal9-16.2 (1) turnkey; urgency=low
+
+  * Update Drupal9 to latest upstream version - 9.2.4.
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Wed, 25 Aug 2021 10:32:37 +1000
+
 turnkey-drupal9-16.1 (1) turnkey; urgency=low
 
   * Update Drupal9 to latest upstream version - 9.1.4.
