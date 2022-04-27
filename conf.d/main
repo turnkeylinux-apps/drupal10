@@ -10,7 +10,7 @@ ADMIN_PASS=turnkey
 SRC=/usr/local/src
 WEBROOT=/var/www/drupal9
 
-PHP_V=7.3
+PHP_V=7.4
 USER=www-data
 
 # set proxy settings
@@ -35,10 +35,14 @@ cd $WEBROOT
 turnkey-composer require drupal/console --prefer-dist --optimize-autoloader --no-interaction --with-all-dependencies
 
 # install drupal console launcher
-cd / # drupal self-update fails from WEBROOT?!
-wget -O /usr/local/bin/drupal -L https://drupalconsole.com/installer
+
+ln -s /var/www/drupal9/vendor/bin/drupal /usr/local/bin/
 chmod +x /usr/local/bin/drupal
-drupal self-update
+turnkey-composer --no-plugins config allow-plugins.drupal/console-extend-plugin true
+turnkey-composer --no-plugins config allow-plugins.drupal/core-composer-scaffold true
+turnkey-composer --no-plugins config allow-plugins.drupal/core-project-message true
+turnkey-composer --no-plugins config allow-plugins.composer/installers true
+turnkey-composer update drupal/console
 
 # install drush
 cd $WEBROOT

@@ -1,3 +1,16 @@
+turnkey-drupal9-17.0 (1) turnkey; urgency=low
+
+  * Update Drupal9 to latest upstream version - 9.3.12.
+
+  * Includes PHP 7.4.
+
+  * Updated all relevant Debian packages to Bullseye/11 versions
+
+  * Note: Please refer to turnkey-core's 17.0 changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Stefan Davis <stefan@turnkeylinux.org>  Wed, 27 Apr 2022 02:32:38 +0000
+
 turnkey-drupal9-16.2 (1) turnkey; urgency=low
 
   * Update Drupal9 to latest upstream version - 9.2.4.
