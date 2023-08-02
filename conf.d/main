@@ -10,24 +10,11 @@ ADMIN_PASS=turnkey
 SRC=/usr/local/src
 WEBROOT=/var/www/drupal10
 
-PHP_V=8.1 ### Needed for Laminas module ### UncleDan 2 Aug 2023
+PHP_V=8.2
 USER=www-data
 
 # set proxy settings
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
-
-apt remove -y php*
-apt autoclean
-
-## Enable Sury repo for downgrading PHP: https://packages.sury.org/php/README.txt
-apt update
-apt -y install lsb-release ca-certificates curl
-curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg
-sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
-apt update
-
-## Finally install PHP
-apt install -y php${PHP_V} php${PHP_V}-mysql php${PHP_V}-readline php${PHP_V}-gd php${PHP_V}-ssh2 php${PHP_V}-twig php${PHP_V}-xml php${PHP_V}-curl php${PHP_V}-mbstring php${PHP_V}-uploadprogress php${PHP_V}-zip
 
 # increase php cli memory limit - for composer install.
 sed -i "s|^memory_limit.*|memory_limit = 768M|" /etc/php/${PHP_V}/cli/php.ini
