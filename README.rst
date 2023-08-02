@@ -100,8 +100,8 @@ Credentials *(passwords set at first boot)*
 .. _composer: https://getcomposer.org/
 .. _drush: https://www.drush.org/
 .. _drupal-console: https://drupalconsole.com/
-.. _turnkey-drush: https://github.com/turnkeylinux-apps/drupal8/blob/master/overlay/usr/local/bin/turnkey-drush
-.. _turnkey-drupal: https://github.com/turnkeylinux-apps/drupal8/blob/master/overlay/usr/local/bin/turnkey-drupal
+.. _turnkey-drush: https://github.com/turnkeylinux-apps/drupal9/blob/master/overlay/usr/local/bin/turnkey-drush
+.. _turnkey-drupal: https://github.com/turnkeylinux-apps/drupal9/blob/master/overlay/usr/local/bin/turnkey-drupal
 .. _turnkey-composer: https://github.com/turnkeylinux/common/blob/master/overlays/composer/usr/local/bin/turnkey-composer
 .. _Security Alerts: https://www.turnkeylinux.org/docs/automatic-security-alerts
 .. _Drupal 8 documentation: https://www.drupal.org/docs/8/update
