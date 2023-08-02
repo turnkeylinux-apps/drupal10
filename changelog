@@ -12,7 +12,7 @@ turnkey-drupal9-17.0 (1) turnkey; urgency=low
 
   * Update Drupal9 to latest upstream version - 9.3.12.
 
-  * Includes PHP 7.4.
+  * Includes PHP 8.2.
 
   * Updated all relevant Debian packages to Bullseye/11 versions
 

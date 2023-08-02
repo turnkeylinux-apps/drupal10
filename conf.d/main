@@ -10,7 +10,7 @@ ADMIN_PASS=turnkey
 SRC=/usr/local/src
 WEBROOT=/var/www/drupal10
 
-PHP_V=7.4
+PHP_V=8.2
 USER=www-data
 
 # set proxy settings
