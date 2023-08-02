@@ -27,8 +27,8 @@ sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://pa
 apt update
 
 ## Finally install PHP
-apt install -y php${PHP_V} php${PHP_V}-mysql php${PHP_V}-readline php${PHP_V}-gd php${PHP_V}-ssh2 php${PHP_V}-twig php${PHP_V}-xml php${PHP_V}-curl php${PHP_V}-mbstring php${PHP_V}-uploadprogress php${PHP_V}-zip
-
+apt install -y php${PHP_V} php${PHP_V}-mysql php${PHP_V}-readline php${PHP_V}-gd php${PHP_V}-ssh2 php${PHP_V}-xml php${PHP_V}-curl php${PHP_V}-mbstring php${PHP_V}-uploadprogress php${PHP_V}-zip ### php${PHP_V}-twig seems not existing in 8.1 ### UncleDan 2 Aug 2023
+ 
 # increase php cli memory limit - for composer install.
 sed -i "s|^memory_limit.*|memory_limit = 768M|" /etc/php/${PHP_V}/cli/php.ini
 
