@@ -67,7 +67,7 @@ cd $WEBROOT
 turnkey-drush site-install standard -y \
     --account-name=$ADMIN_NAME \
     --account-pass=$ADMIN_PASS \
-    --site-name=\"TurnKey Drupal 9\" \
+    --site-name=\"TurnKey Drupal 10\" \
     --db-url=mysql://$DB_USER:$DB_PASS@localhost/$DB_NAME
 
 # download and install modules
@@ -106,7 +106,7 @@ cat >> $CONF << EOF
 /**
  * Disable Poor Man's Cron:
  *
- * Drupal 9 enables the built-in Poor Man's Cron by default.
+ * Drupal 10 enables the built-in Poor Man's Cron by default.
  * Poor Man's Cron relies on site activity to trigger Drupal's cron,
  * and is not well suited for low activity websites.
  *

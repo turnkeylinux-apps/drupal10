@@ -1,4 +1,4 @@
-Drupal 9 - Content Management Framework
+Drupal 10 - Content Management Framework
 =======================================
 
 `Drupal`_ is an open source content management platform licensed under
@@ -9,7 +9,7 @@ and large community-driven websites.
 This appliance includes all the standard features in `TurnKey Core`_,
 and on top of that:
 
-- Drupal 9 configurations:
+- Drupal 10 configurations:
    
    - Installed (using composer_) from upstream source code to /var/www/drupal10.
      As of v16.1, doc root is owned by www-data (webserver user). This new
@@ -34,7 +34,7 @@ and on top of that:
      system requires at least 2GB+ free memory (physical &/or virtual; i.e.
      swap - a temporary swap file is acceptable).
 
-- Bundled Drupal 9 modules and dependencies (installed to 
+- Bundled Drupal 10 modules and dependencies (installed to 
   /var/www/drupal10/web/modules - new default for Drupal10):
 
    - `Field group`_: Allows fields to be grouped together.
@@ -93,7 +93,7 @@ Credentials *(passwords set at first boot)*
 
 -  Webmin, SSH, MySQL: username **root**
 -  Adminer: username **adminer**
--  Drupal 9: username **admin**
+-  Drupal 10: username **admin**
 
 .. _Drupal: https://drupal.org
 .. _TurnKey Core: https://www.turnkeylinux.org/core

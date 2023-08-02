@@ -35,7 +35,7 @@ turnkey-drupal9-16.1 (1) turnkey; urgency=low
 
   * Include Drupal Console - 1.9.7 - closes #1564.
 
-  * Drupal 9 files & directories all owned by 'www-data' user to make
+  * Drupal 10 files & directories all owned by 'www-data' user to make
     management easier. Note that whilst this does make management easier,
     (especially in conjunction with 'turnkey-composer') it does have
     security implications. To lock things down, you could change ownership.
