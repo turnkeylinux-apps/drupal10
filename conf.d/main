@@ -10,7 +10,7 @@ ADMIN_PASS=turnkey
 SRC=/usr/local/src
 WEBROOT=/var/www/drupal10
 
-PHP_V=8.2
+PHP_V=8.1 ### Needed for Laminas ### UncleDan 2 Aug 2023
 USER=www-data
 
 # set proxy settings
