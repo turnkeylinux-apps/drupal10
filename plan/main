@@ -1,13 +1,12 @@
 #include <turnkey/base>
-#include <turnkey/lamp>
+#include <turnkey/lamp81>
 
-php-readline
+php8.1-readline
 
-php-gd
-php-ssh2            /* support inline updates */
-php-twig            /* Twig C extension - improves rendering performance */
-php-xml
-php-curl
-php-mbstring        /* improved multibyte utf-8 string support */
-php-uploadprogress  /* support for upload progress info */
-php-zip             /* drush dependency */
+php8.1-gd
+php8.1-ssh2            /* support inline updates */
+php8.1-xml
+php8.1-curl
+php8.1-mbstring        /* improved multibyte utf-8 string support */
+php8.1-uploadprogress  /* support for upload progress info */
+php8.1-zip             /* drush dependency */
