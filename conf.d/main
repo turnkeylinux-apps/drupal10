@@ -30,28 +30,11 @@ mkdir -p $WEBROOT
 chown $USER:$USER $WEBROOT
 turnkey-composer create-project drupal/recommended-project:10.x $WEBROOT --no-dev --no-interaction
 
-# install drupal console
 cd $WEBROOT
-turnkey-composer require drupal/console --prefer-dist --optimize-autoloader --no-interaction --with-all-dependencies
-
-# install drupal console launcher
-
-ln -s /var/www/drupal10/vendor/bin/drupal /usr/local/bin/
-chmod +x /usr/local/bin/drupal
-turnkey-composer --no-plugins config allow-plugins.drupal/console-extend-plugin true
-turnkey-composer --no-plugins config allow-plugins.drupal/core-composer-scaffold true
-turnkey-composer --no-plugins config allow-plugins.drupal/core-project-message true
-turnkey-composer --no-plugins config allow-plugins.composer/installers true
-turnkey-composer update drupal/console
 
 # install drush
 cd $WEBROOT
 turnkey-composer require drush/drush --no-interaction
-
-# install global drush-launcher (drush installed as drupal module via composer above)
-wget -O /usr/local/bin/drush https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar
-chmod +x /usr/local/bin/drush
-drush self-update
 
 CONF=$WEBROOT/web/sites/default/settings.php
 cp $WEBROOT/web/sites/default/default.settings.php $CONF
@@ -62,13 +45,6 @@ chown -R $USER:$USER $WEBROOT
 service mysql start
 mysqladmin create $DB_NAME
 mysql --batch --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost identified by '$DB_PASS'; flush privileges;"
-
-cd $WEBROOT
-turnkey-drush site-install standard -y \
-    --account-name=$ADMIN_NAME \
-    --account-pass=$ADMIN_PASS \
-    --site-name=\"TurnKey Drupal 9\" \
-    --db-url=mysql://$DB_USER:$DB_PASS@localhost/$DB_NAME
 
 # download and install modules
 MODULES="drupal/ctools \
@@ -81,6 +57,12 @@ MODULES="drupal/ctools \
 for module in $MODULES; do
     turnkey-composer require $module --no-interaction
 done
+
+turnkey-drush site-install standard -y \
+    --account-name=$ADMIN_NAME \
+    --account-pass=$ADMIN_PASS \
+    --site-name='TurnKey Drupal 10' \
+    --db-url=mysql://$DB_USER:$DB_PASS@localhost/$DB_NAME
 
 turnkey-drush en -y \
     ctools \
@@ -124,9 +106,11 @@ cat >$CRON_DRUPAL<<EOF
 #!/bin/bash -e
 # Trigger drush cron
 
-[ -x /usr/local/bin/drush ] || exit 0
+DRUSH="/usr/local/bin/turnkey-drush"
 
-su www-data -s /bin/bash -c "/usr/local/bin/drush --quiet cron --root=/var/www/drupal9"
+[[ -x \$DRUSH ]] || exit 0
+
+\$DRUSH --quiet cron
 EOF
 chmod +x $CRON_DRUPAL
 

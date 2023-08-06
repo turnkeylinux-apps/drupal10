@@ -3,7 +3,9 @@
 [[ -z "$DEBUG" ]] || set -x
 
 export DRUSH_USER="${DRUSH_USER:-www-data}"
+export DRUPAL_ROOT="${DRUPAL_ROOT:-/var/www/drupal10}"
 
-COMMAND="drush $@"
+COMMAND="$@"
+DRUSH="./vendor/bin/drush"
 
-runuser $DRUSH_USER -s /bin/bash -c "$COMMAND"
+runuser $DRUSH_USER -s /bin/bash -c "cd $DRUPAL_ROOT && $DRUSH $COMMAND"

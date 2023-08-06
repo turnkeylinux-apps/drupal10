@@ -1,9 +1,0 @@
-#!/bin/bash -e
-
-[[ -z "$DEBUG" ]] || set -x
-
-export DRUPAL_USER="${DRUPAL_USER:-www-data}"
-
-COMMAND="drupal $@"
-
-runuser $DRUPAL_USER -s /bin/bash -c "$COMMAND"
