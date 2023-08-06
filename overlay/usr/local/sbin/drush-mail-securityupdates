@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-cd /var/www/drupal9
+cd /var/www/drupal10
 TMPFILE=$(tempfile)
 trap "rm -f $TMPFILE" INT TERM EXIT
 drush pm-updatestatus --security-only > $TMPFILE

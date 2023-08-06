@@ -10,12 +10,12 @@ while getopts e:p:d: option
     esac
 done
 
-sed -i '/\/\/ For UNIX support/a return static::canonicalize("/root");' /var/www/drupal9/vendor/webmozart/path-util/src/Path.php
+sed -i '/\/\/ For UNIX support/a return static::canonicalize("/root");' /var/www/drupal10/vendor/webmozart/path-util/src/Path.php
 
-cd /var/www/drupal9
+cd /var/www/drupal10
 vendor/bin/drush -y config-set contact.form.feedback recipients "$EMAIL" &> /dev/null
 vendor/bin/drush -y config-set update.settings notification.emails.0 "$EMAIL" &> /dev/null
 vendor/bin/drush -y config-set system.site mail "$EMAIL" &> /dev/null
 vendor/bin/drush user-password admin "$PASSWORD" &> /dev/null
-sed -i "/^\$settings\['trusted_host_patterns'\]/{n;s|.*|     '^$DOMAIN$',|}" /var/www/drupal9/web/sites/default/settings.php
+sed -i "/^\$settings\['trusted_host_patterns'\]/{n;s|.*|     '^$DOMAIN$',|}" /var/www/drupal10/web/sites/default/settings.php
 vendor/bin/drush cache-rebuild &> /dev/null
