@@ -45,15 +45,22 @@ chown -R $USER:$USER $WEBROOT
 service mysql start
 mysqladmin create $DB_NAME
 mysql --batch --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost identified by '$DB_PASS'; flush privileges;"
+mysql --batch --execute "set global transaction isolation level read committed;"
 
 # download and install modules
 MODULES="drupal/ctools \
          drupal/field_group \
          drupal/google_analytics \
-         drupal/honeypot \
          drupal/imce \
          drupal/pathauto \
          drupal/token"
+
+# drupal/honeypot
+#
+# currently doesn't work on drupal10, if you want this re-included upstream
+# would appreciate help, read the thread
+# https://www.drupal.org/project/honeypot/issues/2943526
+
 for module in $MODULES; do
     turnkey-composer require $module --no-interaction
 done
@@ -68,8 +75,8 @@ turnkey-drush en -y \
     ctools \
     field_group \
     google_analytics \
-    honeypot \
     pathauto
+#honeypot \
 
 turnkey-drush cache-rebuild
 
@@ -79,8 +86,7 @@ a2ensite drupal10
 a2enmod rewrite 
  
 # insert "www.example.com" as default trusted_host (inithook will adjust)
-NEW_LINES="\$settings['trusted_host_patterns'] = array\(\n\t'^www\\\.example\\\.com\$',\n\t'^(\\\d{1,3})\\\.(\\\d{1,3})\\\.(\\\d{1,3})\\\.(\\\d{1,3})$',\n\);\n"
-sed -i "/trusted_host_patterns/,/\*\//{n;s|^$|${NEW_LINES}|}" $CONF
+echo -e "\$settings['trusted_host_patterns'] = [\n\t'^www.example.com\$'\n];" >> $CONF
 
 # disable poor mans cron and setup drush cron
 cat >> $CONF << EOF

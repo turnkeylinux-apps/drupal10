@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Set Drupal9 admin password and email
+"""Set Drupal9 admin password, email and domain to serve
 
 Option:
     --pass=     unless provided, will ask interactively
@@ -11,7 +11,6 @@ Option:
 import sys
 import getopt
 from libinithooks import inithooks_cache
-import pipes
 import time
 
 from libinithooks.dialog_wrapper import Dialog
@@ -71,8 +70,8 @@ def main():
             d = Dialog('TurnKey Linux - First boot configuration')
             
         domain = d.get_input(
-            "Drupal9 Domain",
-            "Enter the domain to serve Drupal9.",
+            "Drupal10 Domain",
+            "Enter the domain to serve Drupal10.",
             DEFAULT_DOMAIN)
             
     if domain == "DEFAULT":
@@ -82,14 +81,17 @@ def main():
 
     print("Progress...")
     m = MySQL()
-    m.execute('UPDATE drupal9.users_field_data SET mail=%s WHERE name=\"admin\";', (email,))
-    m.execute('UPDATE drupal9.users_field_data SET init=%s WHERE name=\"admin\";', (email,))
+    m.execute('UPDATE drupal10.users_field_data SET mail=%s WHERE name=\"admin\";', (email,))
+    m.execute('UPDATE drupal10.users_field_data SET init=%s WHERE name=\"admin\";', (email,))
     domain = domain.replace('.','\\\\\.')
     subprocess.run([
 	'/usr/lib/inithooks/bin/drupalconf.sh',
 	'-e', email,
 	'-p', password,
 	'-d', domain
+    ])
+    subprocess.run([
+	'/etc/cron.hourly/drupal10'
     ])
     
 if __name__ == "__main__":
