@@ -1,5 +1,5 @@
-Drupal 9 - Content Management Framework
-=======================================
+Drupal 10 - Content Management Framework
+========================================
 
 `Drupal`_ is an open source content management platform licensed under
 the GPL. Equipped with a powerful blend of features, Drupal can support
@@ -9,9 +9,9 @@ and large community-driven websites.
 This appliance includes all the standard features in `TurnKey Core`_,
 and on top of that:
 
-- Drupal 9 configurations:
+- Drupal 10 configurations:
    
-   - Installed (using composer_) from upstream source code to /var/www/drupal9.
+   - Installed (using composer_) from upstream source code to /var/www/drupal10.
      As of v16.1, doc root is owned by www-data (webserver user). This new
      default eases management (especially with tools such as the turnkey script
      wrappers) but also has potential security implications.
@@ -34,14 +34,12 @@ and on top of that:
      system requires at least 2GB+ free memory (physical &/or virtual; i.e.
      swap - a temporary swap file is acceptable).
 
-- Bundled Drupal 9 modules and dependencies (installed to 
-  /var/www/drupal9/web/modules - new default for Drupal9):
+- Bundled Drupal 10 modules and dependencies (installed to 
+  /var/www/drupal10/web/modules - new default for Drupal10):
 
    - `Field group`_: Allows fields to be grouped together.
    - `Google analytics`_: Adds Google Analytics js tracking code to all
      your site's pages.
-   - `Honeypot`_: A honeypot for deterring spam bots from completing
-     forms on your site  (additionally uses timestamp method).
    - `Imce`_: Powerful image file uploader and browser, with support for
      on the fly resizing.
    - `PathAuto`_: Auto-generate search engine friendly URLs (SEO).
@@ -66,11 +64,11 @@ Supervised Manual Drupal Update
 It is possible to check for and install updates from the Drupal Admin
 UI:: **Admin > Reports > Available Updates**
 
-Updates for Drupal9 Core often need to be done via commandline. For full
+Updates for Drupal10 Core often need to be done via commandline. For full
 details, please consult the `Drupal Upgrade docs`_, we recommend using
 `Composer to update from the commandline`_ (via turnkey-composer_)::
 
-    cd /var/www/drupal9
+    cd /var/www/drupal10
     # update composer - not strictly necessary
     composer self-update
     turnkey-composer update drupal/core --with-dependencies
@@ -93,7 +91,7 @@ Credentials *(passwords set at first boot)*
 
 -  Webmin, SSH, MySQL: username **root**
 -  Adminer: username **adminer**
--  Drupal 9: username **admin**
+-  Drupal 10: username **admin**
 
 .. _Drupal: https://drupal.org
 .. _TurnKey Core: https://www.turnkeylinux.org/core

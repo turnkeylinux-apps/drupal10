@@ -102,7 +102,7 @@ cat >> $CONF << EOF
  *
  * To re-enable Poor Man's Cron:
  *    Comment out the line below, and disable the system cron
- *    in /etc/cron.hourly/drupal9
+ *    in /etc/cron.hourly/drupal10
  */
 \$config['automated_cron.settings']['interval'] = 0;
 EOF

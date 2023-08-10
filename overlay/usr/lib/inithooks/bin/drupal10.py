@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Set Drupal9 admin password, email and domain to serve
+"""Set Drupal10 admin password, email and domain to serve
 
 Option:
     --pass=     unless provided, will ask interactively
@@ -50,16 +50,16 @@ def main():
     if not password:
         d = Dialog('TurnKey Linux - First boot configuration')
         password = d.get_password(
-            "Drupal9 Password",
-            "Enter new password for the Drupal9 'admin' account.")
+            "Drupal10 Password",
+            "Enter new password for the Drupal10 'admin' account.")
 
     if not email:
         if 'd' not in locals():
             d = Dialog('TurnKey Linux - First boot configuration')
 
         email = d.get_email(
-            "Drupal9 Email",
-            "Enter email address for the Drupal9 'admin' account.",
+            "Drupal10 Email",
+            "Enter email address for the Drupal10 'admin' account.",
 
             "admin@example.com")
 
