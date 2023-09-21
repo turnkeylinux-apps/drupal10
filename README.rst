@@ -34,7 +34,7 @@ and on top of that:
      system requires at least 2GB+ free memory (physical &/or virtual; i.e.
      swap - a temporary swap file is acceptable).
 
-- Bundled Drupal 10 modules and dependencies (installed to 
+- Bundled Drupal 10 modules and dependencies (installed to
   /var/www/drupal10/web/modules - new default for Drupal10):
 
    - `Field group`_: Allows fields to be grouped together.
