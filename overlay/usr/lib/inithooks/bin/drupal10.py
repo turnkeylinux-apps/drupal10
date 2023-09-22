@@ -46,7 +46,7 @@ def main():
             email = val
         elif opt == '--domain':
             domain = val
-            
+
     if not password:
         d = Dialog('TurnKey Linux - First boot configuration')
         password = d.get_password(
@@ -64,19 +64,19 @@ def main():
             "admin@example.com")
 
     inithooks_cache.write('APP_EMAIL', email)
-    
+
     if not domain:
         if 'd' not in locals():
             d = Dialog('TurnKey Linux - First boot configuration')
-            
+
         domain = d.get_input(
             "Drupal10 Domain",
             "Enter the domain to serve Drupal10.",
             DEFAULT_DOMAIN)
-            
+
     if domain == "DEFAULT":
         domain = DEFAULT_DOMAIN
-                
+
     inithooks_cache.write('APP_DOMAIN', domain)
 
     print("Progress...")
@@ -93,6 +93,6 @@ def main():
     subprocess.run([
 	'/etc/cron.hourly/drupal10'
     ])
-    
+
 if __name__ == "__main__":
     main()
