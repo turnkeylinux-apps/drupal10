@@ -12,6 +12,10 @@ import sys
 import getopt
 from libinithooks import inithooks_cache
 import time
+import shutil
+import os
+from pwd import getpwnam
+from grp import getgrnam
 
 from libinithooks.dialog_wrapper import Dialog
 from mysqlconf import MySQL
@@ -79,20 +83,37 @@ def main():
 
     inithooks_cache.write('APP_DOMAIN', domain)
 
-    print("Progress...")
     m = MySQL()
     m.execute('UPDATE drupal10.users_field_data SET mail=%s WHERE name=\"admin\";', (email,))
     m.execute('UPDATE drupal10.users_field_data SET init=%s WHERE name=\"admin\";', (email,))
-    domain = domain.replace('.','\\\\\.')
-    subprocess.run([
-	'/usr/lib/inithooks/bin/drupalconf.sh',
-	'-e', email,
-	'-p', password,
-	'-d', domain
-    ])
-    subprocess.run([
-	'/etc/cron.hourly/drupal10'
-    ])
+    subprocess.run(['turnkey-drush', '-y', 'config-set', 'contact.form.feedback', 'recipients', email])
+    subprocess.run(['turnkey-drush', '-y', 'config-set', 'update.settings', 'notification.emails.0', email])
+    subprocess.run(['turnkey-drush', '-y', 'config-set', 'system.site', 'mail', email])
+    subprocess.run(['turnkey-drush', 'user-password', 'admin', password])
+    conf = '/var/www/drupal10/web/sites/default/settings.php'
+    conf_tmp = f'{conf}.tmp'
+    shutil.move(conf, conf_tmp)
+    domain = domain.replace('.', r'\.')
+    with open(conf_tmp) as fob_tmp:
+        with open(conf, 'w') as fob:
+            for line in fob_tmp:
+                if line.startswith("$settings['trusted_host_patterns']"):
+                    if line.endswith(';\n'):
+                        line = f"$settings['trusted_host_patterns'] = ['^{domain}$'];\n"
+                    else:
+                        print(f"Expected trusted_host_patterns line not found in {conf}",
+                              file=sys.stderr)
+                        shutil.move(conf_tmp, conf)
+                        sys.exit(1)
+                fob.write(line)
+    os.remove(conf_tmp)
+    # restore conf file default perms; i.e. owned by www-data:www-data and read-only
+    uid = getpwnam('www-data').pw_uid
+    gid = getgrnam('www-data').gr_gid
+    os.chown(conf, uid, gid)
+    os.chmod(conf, 0o444)
+    print('Data updated; clearing caches')
+    subprocess.run(['/etc/cron.hourly/drupal10'])
 
 if __name__ == "__main__":
     main()

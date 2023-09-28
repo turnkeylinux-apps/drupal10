@@ -86,7 +86,7 @@ a2ensite drupal10
 a2enmod rewrite 
  
 # insert "www.example.com" as default trusted_host (inithook will adjust)
-echo -e "\$settings['trusted_host_patterns'] = [\n\t'^www.example.com\$'\n];" >> $CONF
+echo "\$settings['trusted_host_patterns'] = ['^www\.example\.com\$'];" >> $CONF
 
 # disable poor mans cron and setup drush cron
 cat >> $CONF << EOF
