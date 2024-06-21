@@ -1,6 +1,6 @@
 turnkey-drupal10-18.1 (1) turnkey; urgency=low
 
-  * Update Drupal10 to latest upstream version - v10.2.7.
+  * Update Drupal10 to latest upstream version - v10.3.0.
 
   * Rebuild for v18.1 - including more recent v18.0 common bugfixes & latest
     Debian packages.
