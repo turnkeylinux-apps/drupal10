@@ -16,14 +16,13 @@ and on top of that:
      default eases management (especially with tools such as the turnkey script
      wrappers) but also has potential security implications.
 
-     **Security note**: Updates to Drupal may require supervision so
+     **Security note**: Updates to Drupal require supervision so
      they **ARE NOT** configured to install automatically. See below for
-     updating Drupal. And/or see `Drupal 8 documentation`_
+     updating Drupal. See the `Drupal update documentation`_ for details.
 
-   - Includes drush_, drupal-console_ and composer_ for command line
-     administration, configuration and development. Also includes relevant
-     wrapper scripts; turnkey-drush_, turnkey-drupal_ & turnkey-composer_ (run
-     the relevant command, but as www-data user).
+   - Includes drush_ and composer_ for command line administration,
+     configuration and development. The turnkey-drush_ and turnkey-composer_
+     wrappers run these tools as the www-data user.
 
    - Drupal security update alerts delivered to your inbox - requires
      `Security Alerts`_ ('secalerts') be enabled on firstboot with a valid
@@ -35,7 +34,7 @@ and on top of that:
      swap - a temporary swap file is acceptable).
 
 - Bundled Drupal 10 modules and dependencies (installed to
-  /var/www/drupal10/web/modules - new default for Drupal10):
+  /var/www/drupal10/web/modules/contrib):
 
    - `Field group`_: Allows fields to be grouped together.
    - `Google analytics`_: Adds Google Analytics js tracking code to all
@@ -69,9 +68,7 @@ details, please consult the `Drupal Upgrade docs`_, we recommend using
 `Composer to update from the commandline`_ (via turnkey-composer_)::
 
     cd /var/www/drupal10
-    # update composer - not strictly necessary
-    composer self-update
-    turnkey-composer update drupal/core --with-dependencies
+    turnkey-composer update "drupal/core-*" --with-all-dependencies
     turnkey-drush updatedb -y
     turnkey-drush cr
 
@@ -97,12 +94,10 @@ Credentials *(passwords set at first boot)*
 .. _TurnKey Core: https://www.turnkeylinux.org/core
 .. _composer: https://getcomposer.org/
 .. _drush: https://www.drush.org/
-.. _drupal-console: https://drupalconsole.com/
-.. _turnkey-drush: https://github.com/turnkeylinux-apps/drupal8/blob/master/overlay/usr/local/bin/turnkey-drush
-.. _turnkey-drupal: https://github.com/turnkeylinux-apps/drupal8/blob/master/overlay/usr/local/bin/turnkey-drupal
+.. _turnkey-drush: https://github.com/turnkeylinux-apps/drupal10/blob/master/overlay/usr/local/bin/turnkey-drush
 .. _turnkey-composer: https://github.com/turnkeylinux/common/blob/master/overlays/composer/usr/local/bin/turnkey-composer
 .. _Security Alerts: https://www.turnkeylinux.org/docs/automatic-security-alerts
-.. _Drupal 8 documentation: https://www.drupal.org/docs/8/update
+.. _Drupal update documentation: https://www.drupal.org/docs/updating-drupal
 .. _Field group: https://www.drupal.org/project/field_group
 .. _Google analytics: https://www.drupal.org/project/google_analytics
 .. _Honeypot: https://www.drupal.org/project/honeypot

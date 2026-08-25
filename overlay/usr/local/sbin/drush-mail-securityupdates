@@ -1,10 +1,23 @@
-#!/bin/bash -e
+#!/bin/bash
+set -e
 
 cd /var/www/drupal10
 TMPFILE=$(mktemp)
-trap "rm -f $TMPFILE" INT TERM EXIT
-/usr/local/bin/drush pm-updatestatus --security-only > $TMPFILE
+trap 'rm -f "$TMPFILE"' INT TERM EXIT
 
-if grep -q 'SECURITY UPDATE' $TMPFILE; then
-	cat $TMPFILE | mail -s 'Drupal security updates available' root
-fi
+set +e
+/usr/local/bin/turnkey-drush pm:security >"$TMPFILE" 2>&1
+status=$?
+set -e
+
+case $status in
+    0)
+        ;;
+    3)
+        mail -s 'Drupal security updates available' root <"$TMPFILE"
+        ;;
+    *)
+        cat "$TMPFILE" >&2
+        exit "$status"
+        ;;
+esac

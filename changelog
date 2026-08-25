@@ -1,3 +1,20 @@
+turnkey-drupal10-19.0 (1) turnkey; urgency=low
+
+  * Upgrade the base distribution to Debian 13/Trixie and PHP 8.4.
+
+  * Update Drupal to 10.6.14 with Drush 13.7.6 and compatible pinned versions
+    of the bundled contributed modules.
+
+  * Update Guzzle to 7.15.2 to include the upstream fixes for CVE-2026-69245
+    and CVE-2026-69246.
+
+  * Create the welcome page through Drupal's entity API and update the
+    security advisory check for current Drush.
+
+  * See the TurnKey Core 19.0 changelog for changes common to all appliances.
+
+ -- TurnKey Linux release engineering <release@turnkeylinux.org>  Tue, 25 Aug 2026 00:00:00 +0000
+
 turnkey-drupal10-18.1 (1) turnkey; urgency=low
 
   * v18.1 rebuild - includes latest Debian & TurnKey packages.
