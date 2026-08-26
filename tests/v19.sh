@@ -40,8 +40,7 @@ test "$drupal_version" = 10.6.14
 test "$drush_version" = 13.7.6
 turnkey-composer validate --no-check-publish --no-interaction >/dev/null
 turnkey-composer install --dry-run --no-dev --no-interaction >/dev/null
-turnkey-composer audit --locked --no-interaction | grep -Fq \
-    'No security vulnerability advisories found'
+turnkey-composer audit --locked --no-interaction >/dev/null
 
 for package_version in \
     'drupal/ctools 4.1.1' \
