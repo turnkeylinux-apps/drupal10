@@ -27,7 +27,7 @@ export COMPOSER_MEMORY_LIMIT=-1 # temporarily disable composer memory limits dur
 # install drupal10
 mkdir -p $WEBROOT
 chown $WEB_USER:$WEB_USER $WEBROOT
-turnkey-composer create-project drupal/recommended-project:10.6.14 $WEBROOT --no-dev --no-interaction
+turnkey-composer create-project drupal/recommended-project:10.6.15 $WEBROOT --no-dev --no-interaction
 
 cd $WEBROOT
 
@@ -52,8 +52,7 @@ turnkey-composer require --no-interaction --update-no-dev \
     drupal/google_analytics:4.0.3 \
     drupal/imce:3.1.5 \
     drupal/pathauto:1.15.0 \
-    drupal/token:1.17.0 \
-    guzzlehttp/guzzle:7.15.2
+    drupal/token:1.17.0
 
 turnkey-drush site-install standard -y \
     --account-name=$ADMIN_NAME \

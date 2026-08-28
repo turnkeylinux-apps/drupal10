@@ -36,7 +36,7 @@ cd /var/www/drupal10
 drupal_version=$(turnkey-drush status --field=drupal-version)
 drush_version=$(turnkey-composer show drush/drush --format=json | \
     php -r '$j=json_decode(stream_get_contents(STDIN), true); echo preg_replace("/^[*v ]+/", "", $j["versions"][0]);')
-test "$drupal_version" = 10.6.14
+test "$drupal_version" = 10.6.15
 test "$drush_version" = 13.7.6
 turnkey-composer validate --no-check-publish --no-interaction >/dev/null
 turnkey-composer install --dry-run --no-dev --no-interaction >/dev/null
@@ -49,7 +49,7 @@ for package_version in \
     'drupal/imce 3.1.5' \
     'drupal/pathauto 1.15.0' \
     'drupal/token 1.17.0' \
-    'guzzlehttp/guzzle 7.15.2'; do
+    'guzzlehttp/guzzle 7.15.3'; do
     read -r package expected <<<"$package_version"
     actual=$(turnkey-composer show "$package" --format=json | \
         php -r '$j=json_decode(stream_get_contents(STDIN), true); echo preg_replace("/^[*v ]+/", "", $j["versions"][0]);')
@@ -142,11 +142,11 @@ grep -Rqs '^Suites: trixie' /etc/apt/sources.list.d
 apache_version=$(dpkg-query -W -f='${Version}' apache2)
 mariadb_version=$(dpkg-query -W -f='${Version}' mariadb-server)
 cat >"$result" <<EOF
-package_source=Debian 13 Trixie packages for PHP, Apache, MariaDB, Postfix and Composer; official Drupal Composer packages from Packagist
+package_source=Debian 13 Trixie packages for PHP, Apache, MariaDB, Postfix and Composer; official Drupal Composer repository for Drupal packages; Packagist for Drush and transitive PHP dependencies
 installed_version=Drupal $drupal_version; Drush $drush_version; PHP $php_version; Apache $apache_version; MariaDB $mariadb_version
 runtime_checks=normal init; firstboot; HTTPS administrator login; Drupal page create and read with MariaDB readback; Apache and MariaDB restart persistence; cron; bundled modules; Webmin, Adminer and Postfix endpoints
 updater_command=turnkey-composer audit --locked; turnkey-composer update drupal/core-* --with-all-dependencies --dry-run; apt-get update
 updater_result=Composer audit passed; supervised Drupal core update resolved successfully without changing the lock file; signed Trixie metadata refreshed
-updater_channel=official Drupal packages through Composer and signed Debian and TurnKey Trixie APT repositories
-integrity_evidence=Composer validated the lock file and exact installed versions, including patched Guzzle 7.15.2; APT accepted signed Trixie metadata; no Bookworm source remained
+updater_channel=official Drupal Composer repository, Packagist, and signed Debian and TurnKey Trixie APT repositories
+integrity_evidence=Composer validated the lock file and exact installed versions, including Drupal core-recommended's patched Guzzle 7.15.3; APT accepted signed Trixie metadata; no Bookworm source remained
 EOF
