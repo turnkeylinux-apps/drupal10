@@ -68,6 +68,8 @@ security_cron_user=$(awk '/drush-mail-securityupdates/ {print $6}' \
 test "$security_cron_user" = root
 runuser -u "$security_cron_user" -- \
     /usr/local/sbin/drush-mail-securityupdates
+test "$(turnkey-drush php:eval 'echo posix_geteuid();')" = \
+    "$(id -u www-data)"
 
 curl --insecure --fail --silent --show-error --location \
     "$base/" >"$page"
