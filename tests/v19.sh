@@ -63,6 +63,11 @@ done
 test -d web/modules/contrib/imce
 turnkey-drush help pm:security >/dev/null
 turnkey-drush cron >/dev/null
+security_cron_user=$(awk '/drush-mail-securityupdates/ {print $6}' \
+    /etc/cron.d/drush-mail-securityupdates)
+test "$security_cron_user" = root
+runuser -u "$security_cron_user" -- \
+    /usr/local/sbin/drush-mail-securityupdates
 
 curl --insecure --fail --silent --show-error --location \
     "$base/" >"$page"
