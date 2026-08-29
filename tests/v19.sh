@@ -61,7 +61,6 @@ for module in ctools field_group google_analytics pathauto token; do
     grep -Fxq "$module" <<<"$enabled_modules"
 done
 test -d web/modules/contrib/imce
-turnkey-drush help pm:security >/dev/null
 turnkey-drush cron >/dev/null
 security_cron_user=$(awk '/drush-mail-securityupdates/ {print $6}' \
     /etc/cron.d/drush-mail-securityupdates)
