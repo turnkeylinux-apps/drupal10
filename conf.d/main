@@ -7,11 +7,10 @@ DB_PASS=$(mcookie)
 ADMIN_NAME=admin
 ADMIN_PASS=turnkey
 
-SRC=/usr/local/src
 WEBROOT=/var/www/drupal10
 
-PHP_V=8.2
-USER=www-data
+PHP_V=8.4
+WEB_USER=www-data
 
 # set proxy settings
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
@@ -27,43 +26,33 @@ export COMPOSER_MEMORY_LIMIT=-1 # temporarily disable composer memory limits dur
 
 # install drupal10
 mkdir -p $WEBROOT
-chown $USER:$USER $WEBROOT
-turnkey-composer create-project drupal/recommended-project:10.x $WEBROOT --no-dev --no-interaction
+chown $WEB_USER:$WEB_USER $WEBROOT
+turnkey-composer create-project drupal/recommended-project:10.6.15 $WEBROOT --no-dev --no-interaction
 
 cd $WEBROOT
-
-# install drush
-cd $WEBROOT
-turnkey-composer require drush/drush --no-interaction
 
 CONF=$WEBROOT/web/sites/default/settings.php
 cp $WEBROOT/web/sites/default/default.settings.php $CONF
 LIBRARIES_PATH=$WEBROOT/libraries
 mkdir -p $LIBRARIES_PATH/
-chown -R $USER:$USER $WEBROOT
+chown -R $WEB_USER:$WEB_USER $WEBROOT
 
 service mysql start
-mysqladmin create $DB_NAME
-mysql --batch --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost identified by '$DB_PASS'; flush privileges;"
+mysql --batch --execute "CREATE DATABASE $DB_NAME CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql --batch --execute "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';"
+mysql --batch --execute "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'localhost';"
 mysql --batch --execute "set global transaction isolation level read committed;"
 
-# download and install modules
-MODULES="drupal/ctools \
-         drupal/field_group \
-         drupal/google_analytics \
-         drupal/imce \
-         drupal/pathauto \
-         drupal/token"
-
-# drupal/honeypot
-#
-# currently doesn't work on drupal10, if you want this re-included upstream
-# would appreciate help, read the thread
-# https://www.drupal.org/project/honeypot/issues/2943526
-
-for module in $MODULES; do
-    turnkey-composer require $module --no-interaction
-done
+# Install the maintained command-line tools and bundled modules at the versions
+# validated for the v19 appliance.
+turnkey-composer require --no-interaction --update-no-dev \
+    drush/drush:13.7.6 \
+    drupal/ctools:4.1.1 \
+    drupal/field_group:4.0.0 \
+    drupal/google_analytics:4.0.3 \
+    drupal/imce:3.1.5 \
+    drupal/pathauto:1.15.0 \
+    drupal/token:1.17.0
 
 turnkey-drush site-install standard -y \
     --account-name=$ADMIN_NAME \
@@ -83,8 +72,8 @@ turnkey-drush cache-rebuild
 # configure apache
 a2dissite 000-default
 a2ensite drupal10
-a2enmod rewrite 
- 
+a2enmod rewrite
+
 # insert "www.example.com" as default trusted_host (inithook will adjust)
 echo "\$settings['trusted_host_patterns'] = ['^www\.example\.com\$'];" >> $CONF
 
@@ -120,17 +109,11 @@ DRUSH="/usr/local/bin/turnkey-drush"
 EOF
 chmod +x $CRON_DRUPAL
 
-# create welcome page
-MYSQL_BATCH="mysql --batch --execute"
-
+# Create the welcome page through Drupal so entity revisions and field storage
+# remain consistent with the installed schema.
 WELCOME='<p>Please follow these steps to set up and start using your website:</p><ol><li><strong>Configure your website:</strong> To get started, log in as <b>admin</b> and visit the <a href=\"/admin\">administration section</a>, where you can customize and configure all aspects of your website.</li><li><strong>Start posting content:</strong> When ready, delete this welcome and <a href=\"/node/add\">create content</a> for your website.</li></ol><p>For more information, please refer to the <a href=\"https://www.turnkeylinux.org/drupal10\">TurnKey Drupal10 release notes</a>, <a href=\"/admin/help\">help section</a>, or the <a href=\"https://drupal.org/handbooks\">online Drupal handbooks</a>. You may also post at the <a href=\"https://drupal.org/forum\">Drupal forum</a>, or view the wide range of <a href=\"https://drupal.org/support\">other support options</a> available.</p>'
-
-$MYSQL_BATCH "INSERT INTO $DB_NAME.node (nid, vid, type, uuid, langcode) VALUES (1,1,'page','dbab9403-2ebd-4fb9-8a00-e764ce980ecd','en');"
-$MYSQL_BATCH "INSERT INTO $DB_NAME.node__body (bundle, deleted, entity_id, revision_id, langcode, delta, body_value, body_summary, body_format) VALUES ('page',0,1,1,'en',0,'$WELCOME','$WELCOME','basic_html');"
-$MYSQL_BATCH "INSERT INTO $DB_NAME.node_field_data (nid, vid, type, langcode, title, uid, status, created, changed, promote, sticky, revision_translation_affected, default_langcode) VALUES (1,1,'page','en','Welcome to TurnKey Drupal',1,1,1435831165,1435831165,1,0,1,1);"
-$MYSQL_BATCH "INSERT INTO $DB_NAME.node_field_revision (nid, vid, langcode, title, uid, status, created, changed, promote, sticky, revision_translation_affected, default_langcode) VALUES (1,1,'en','Welcome to TurnKey Drupal',1,1,1435831165,1435831165,1,0,1,1);"
-$MYSQL_BATCH "INSERT INTO $DB_NAME.node_revision (nid, vid, langcode, revision_timestamp, revision_uid, revision_log) VALUES (1,1,'en',1435831535,1,'');"
-$MYSQL_BATCH "INSERT INTO $DB_NAME.node_revision__body (bundle, deleted, entity_id, revision_id, langcode, delta, body_value, body_summary, body_format) VALUES ('page',0,1,1,'en',0,'$WELCOME','$WELCOME','basic_html');"
+WELCOME_B64=$(printf '%s' "$WELCOME" | base64 -w0)
+turnkey-drush php:eval "\$node = \\Drupal\\node\\Entity\\Node::create(['type' => 'page', 'title' => 'Welcome to TurnKey Drupal', 'body' => ['value' => base64_decode('$WELCOME_B64'), 'format' => 'basic_html'], 'status' => 1, 'promote' => 1]); \$node->save();"
 
 service mysql stop
 

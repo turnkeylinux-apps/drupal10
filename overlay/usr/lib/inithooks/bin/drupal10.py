@@ -86,10 +86,18 @@ def main():
     m = MySQL()
     m.execute('UPDATE drupal10.users_field_data SET mail=%s WHERE name=\"admin\";', (email,))
     m.execute('UPDATE drupal10.users_field_data SET init=%s WHERE name=\"admin\";', (email,))
-    subprocess.run(['turnkey-drush', '-y', 'config-set', 'contact.form.feedback', 'recipients', email])
-    subprocess.run(['turnkey-drush', '-y', 'config-set', 'update.settings', 'notification.emails.0', email])
-    subprocess.run(['turnkey-drush', '-y', 'config-set', 'system.site', 'mail', email])
-    subprocess.run(['turnkey-drush', 'user-password', 'admin', password])
+    subprocess.run([
+        'turnkey-drush', '-y', 'config-set', 'contact.form.feedback',
+        'recipients', email
+    ], check=True)
+    subprocess.run([
+        'turnkey-drush', '-y', 'config-set', 'update.settings',
+        'notification.emails.0', email
+    ], check=True)
+    subprocess.run([
+        'turnkey-drush', '-y', 'config-set', 'system.site', 'mail', email
+    ], check=True)
+    subprocess.run(['turnkey-drush', 'user-password', 'admin', password], check=True)
     conf = '/var/www/drupal10/web/sites/default/settings.php'
     conf_tmp = f'{conf}.tmp'
     shutil.move(conf, conf_tmp)
@@ -113,7 +121,7 @@ def main():
     os.chown(conf, uid, gid)
     os.chmod(conf, 0o444)
     print('Data updated; clearing caches')
-    subprocess.run(['/etc/cron.hourly/drupal10'])
+    subprocess.run(['/etc/cron.hourly/drupal10'], check=True)
 
 if __name__ == "__main__":
     main()

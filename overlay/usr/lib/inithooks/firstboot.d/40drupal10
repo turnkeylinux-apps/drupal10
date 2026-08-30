@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# set drupal9 admin password and email
+# set Drupal 10 admin password, email and domain
 
 . /etc/default/inithooks
 
